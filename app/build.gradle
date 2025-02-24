@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId 'com.github.tvbox.osc'
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName '1.0.0'
         multiDexEnabled true
@@ -114,3 +114,4 @@ dependencies {
 //    implementation 'com.google.android.gms:play-services-cronet:18.0.1'
     implementation ('org.chromium.net:cronet-embedded:101.4951.41')
 }
+
