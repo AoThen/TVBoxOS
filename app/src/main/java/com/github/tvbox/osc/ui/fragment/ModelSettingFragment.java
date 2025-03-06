@@ -72,6 +72,7 @@ public class ModelSettingFragment extends BaseLazyFragment {
     private TextView tvSearchView;
     private TextView tvShowPreviewText;
     private TextView tvFastSearchText;
+    private TextView tvm3u8AdText;
     private TextView tvRecStyleText;
     private TextView tvIjkCachePlay;
 
@@ -91,7 +92,9 @@ public class ModelSettingFragment extends BaseLazyFragment {
     @Override
     protected void init() {
         tvFastSearchText = findViewById(R.id.showFastSearchText);
-        tvFastSearchText.setText(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) ? "已开启" : "已关闭");
+        tvFastSearchText.setText(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) ? "开启" : "关闭");
+        tvm3u8AdText = findViewById(R.id.m3u8AdText);
+        tvm3u8AdText.setText(Hawk.get(HawkConfig.M3U8_PURIFY, false) ? "开启" : "关闭");
         tvRecStyleText = findViewById(R.id.showRecStyleText);
         tvRecStyleText.setText(Hawk.get(HawkConfig.HOME_REC_STYLE, false) ? "是" : "否");
         tvShowPreviewText = findViewById(R.id.showPreviewText);
@@ -316,6 +319,15 @@ public class ModelSettingFragment extends BaseLazyFragment {
                     @Override
                     public void click(String value) {
                         Hawk.put(HawkConfig.API_URL, value);
+                        Hawk.put(HawkConfig.LIVE_API_URL, value);
+                        ArrayList<String> history = Hawk.get(HawkConfig.LIVE_API_HISTORY, new ArrayList<String>());
+                        if (!history.contains(value)) {
+                            history.add(0, value);
+                        }
+                        if (history.size() > 30) {
+                            history.remove(30);
+                        }
+                        Hawk.put(HawkConfig.LIVE_API_HISTORY, history);
                         tvApi.setText(value);
                         dialog.dismiss();
                     }
@@ -620,7 +632,16 @@ public class ModelSettingFragment extends BaseLazyFragment {
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
                 Hawk.put(HawkConfig.FAST_SEARCH_MODE, !Hawk.get(HawkConfig.FAST_SEARCH_MODE, false));
-                tvFastSearchText.setText(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) ? "已开启" : "已关闭");
+                tvFastSearchText.setText(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false) ? "开启" : "关闭");
+            }
+        });
+        findViewById(R.id.m3u8Ad).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FastClickCheckUtil.check(v);
+                boolean is_purify=Hawk.get(HawkConfig.M3U8_PURIFY, false);
+                Hawk.put(HawkConfig.M3U8_PURIFY, !is_purify);
+                tvm3u8AdText.setText(!is_purify ? "开启" : "关闭");
             }
         });
         findViewById(R.id.llHomeRecStyle).setOnClickListener(new View.OnClickListener() {
